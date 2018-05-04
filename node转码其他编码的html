@@ -28,7 +28,7 @@
                 var html = iconv.decode(Buffer.concat(chunks), 'gbk')
                 var $ = cheerio.load(html)
                 
-                //$之后的用法和jquery一致，可以进行数据筛选了,一下省略
+                //$之后的用法和jquery一致，可以进行数据筛选了,以下省略
                 .
                 .
                 .
