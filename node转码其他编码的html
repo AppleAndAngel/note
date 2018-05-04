@@ -1,1 +1,78 @@
-
+//做一个爬虫练习，发现爬下来的网页编码非utf-8（注：nodejs中编码格式只有utf-8，其他格式的html需要进行转码）
+//经过调研，目前发现两种方式可以实现转码
+  
+  (注：cheerio引入，方便jquery操作)
+    1.iconv-lite + cheerio
+    //iconv-lite需要传入一个Buffer数组，此法只能借助http 或者 request模块实现，在superagent模块中不能讲数据转换成Buffer 
+    
+    
+   2.superagent-charset + cheerio
+    //superagent-charset的用法和superagent的用法一样，不一样的是需要传入一个现有文档的编码 eg:charset('gbk')
+    
+    
+ 闲话少说，上代码：
+    法一：
+        var http = require('http'),
+            iconv = require('iconv-lite'),
+            cheerio = require('cheerio')
+            
+         var catchUrl = 'http://xxxx.xxx.com' //需要爬虫的网址，在这里假设此网址返回的网页编码为gbk
+         
+         http.get(catchUrl, function(res){
+            var chunks = [];
+            res.on('data', function(chunk){
+              chunks.push(chunk)  //得到Buffer数组
+            })
+            
+            res.on('end',function(){
+                var html = iconv.decode(Buffer.concat(chunks), 'gbk')
+                var $ = cheerio.load(html)
+                
+                //$之后的用法和jquery一致，可以进行数据筛选了,一下省略
+                .
+                .
+                .
+                .
+                .  
+                
+            })
+         
+         })
+         
+         
+         
+     法二：
+     
+        var superagent = require('superagent-charset'),
+            cheerio = require('cheerio');
+            
+         var catchUrl = 'http://xxx.xxx.com' 
+         
+         superagent.get(catchUrl)
+                   .charset('gbk')
+                   .end(function(err, res){
+                      if(err){
+                        return
+                      }
+                      
+                      var html= res.text
+                      var $ = cheerio.load(html)
+                      
+                      .
+                      .
+                      .
+                      .
+                      .
+                      .                 
+                   
+                   })
+         
+         
+         
+      
+ 
+ 
+  
+  
+  
+  
